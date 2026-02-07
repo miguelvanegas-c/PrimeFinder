@@ -11,6 +11,8 @@ public class PrimeFinderThread extends Thread{
     @Getter
     private volatile boolean timeToPause;
 
+    @Getter
+    private volatile boolean isPaused = false;
 
 	int a,b;
 	
@@ -29,13 +31,16 @@ public class PrimeFinderThread extends Thread{
 	public void run(){
             for (int i= a;i < b;i++){
                 synchronized (pauseThread) {
+                    isPaused = true;
                     while (timeToPause) {
+                        timeToPause = false;
                         try {
                             pauseThread.wait();
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
                     }
+                    isPaused = false;
                 }
                 if (isPrime(i)){
                     primes.add(i);

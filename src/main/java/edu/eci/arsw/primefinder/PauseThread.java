@@ -17,9 +17,13 @@ public class PauseThread extends Thread {
         while(threadsIsAlive()) {
             try {
                 Thread.sleep(miliseconds);
-                synchronized (this) {
-                    Arrays.stream(pft).forEach(t -> t.setTimeToPause(true));
-                    Arrays.stream(pft).forEach(PrimeFinderThread::printPrimesNum);
+                Arrays.stream(pft).forEach(t -> t.setTimeToPause(true));
+                Thread.sleep(1);
+                Arrays.stream(pft).forEach(PrimeFinderThread::printPrimesNum);
+                for (PrimeFinderThread t : pft) {
+                    while (t.isAlive() && !t.isPaused()) {
+                        Thread.yield();
+                    }
                 }
                 sc.nextLine();
 
@@ -36,7 +40,7 @@ public class PauseThread extends Thread {
     private boolean threadsIsAlive() {
         int num = 0;
         for(Thread t : pft ) {
-            if(t.getState() == PrimeFinderThread.State.TERMINATED) {
+            if(t.getState() == Thread.State.TERMINATED) {
                 num++;
             }
         }
