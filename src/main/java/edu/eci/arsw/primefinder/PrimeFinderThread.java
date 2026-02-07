@@ -33,7 +33,6 @@ public class PrimeFinderThread extends Thread{
                 synchronized (pauseThread) {
                     isPaused = true;
                     while (timeToPause) {
-                        timeToPause = false;
                         try {
                             pauseThread.wait();
                         } catch (InterruptedException e) {
