@@ -15,28 +15,28 @@ El desarrollo fue el siguiente:
 Primero se implementó un nuevo hilo PauseThread, encargado de llevar un
 temporizador para pausar al resto de hilos cuando fuera necesario.
 
-![PauseThread](img.png)
+![PauseThread](imgs/img.png)
 
 El hilo Control se encargó de inyectar la instancia de PauseThread a todos
 los PrimeFinderThread y de iniciar sus ejecuciones. Una vez iniciados, cada
 hilo realizaba su trabajo hasta que transcurrieran los milisegundos
 especificados en Control.
 
-![Control](img2.png)
+![Control](imgs/img2.png)
 
 En ese momento, PauseThread modificaba un atributo volatile que contenía cada
 PrimeFinderThread para notificarle que era momento de pausar. Cada hilo
 verificaba periódicamente esta variable y, al detectar la señal, pausaba su
 ejecución con wait() sobre la instancia de PauseThread (usada como monitor).
 
-![PrimeFinderThread](img_1.png)
+![PrimeFinderThread](imgs/img_1.png)
 
 Una vez todos los hilos estaban pausados, PauseThread imprimía el número de
 primos que cada uno había encontrado, cambiaba la variable de control, y
 ejecutaba notifyAll() sobre sí mismo para despertar a todos los hilos y que
 reanudaran su ejecución.
 
-![PauseThreadRun](img_2.png)!
+![PauseThreadRun](imgs/img_2.png)!
 
 Como ajuste adicional, se implementó un mecanismo para garantizar que la
 impresión solo ocurriera cuando todos los hilos estuvieran completamente
@@ -44,7 +44,7 @@ pausados. Cada PrimeFinderThread tiene una variable volatile que indica si
 está pausado, y PauseThread verifica todas estas variables antes de imprimir
 los resultados.
 
-![isPaused](img_3.png) ![.yield](img_4.png)
+![isPaused](imgs/img_3.png) ![.yield](imgs/img_4.png)
 
 
 
